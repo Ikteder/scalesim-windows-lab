@@ -7,6 +7,7 @@ python3 -c 'import sys; assert sys.version_info[:2]==(3,12), "Ubuntu 24.04 / Pyt
 cd "$root"
 test -d .energy-venv || python3 -m venv .energy-venv
 source .energy-venv/bin/activate
+python -c 'import sys; assert sys.version_info[:2]==(3,12), "Existing energy venv must use Python 3.12"'
 python -m pip install -r requirements.txt
 python -m pip install --no-deps --no-build-isolation -e vendor/scale-sim-v3
 mkdir -p energy-tools
@@ -24,5 +25,6 @@ python -m pip install ./accelergy pyyaml ./accelergy-aladdin-plug-in ./accelergy
 (cd accelergy-cacti-plug-in; if ! test -x cacti/cacti; then make -C cacti; fi; test -x cacti/cacti; python -m pip install .)
 cd "$root/vendor/scale-sim-v3"
 python "$root/energy/patch_energy.py"
+python "$root/energy/configure.py"
 python -m pip check
 echo 'ENERGY SETUP PASSED. Run bash energy/Run-Energy.sh from the lab root.'

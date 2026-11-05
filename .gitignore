@@ -4,3 +4,8 @@ runs/
 __pycache__/
 *.egg-info/
 *.pyc
+.energy-venv/
+energy-tools/
+runs_direct/
+examples/my_model.csv
+vendor/scale-sim-v3/rundir-accelergy/accelergy_config.yaml

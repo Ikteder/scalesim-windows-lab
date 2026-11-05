@@ -1,5 +1,7 @@
 param([string]$PythonExe)
 $ErrorActionPreference = 'Stop'
+# Ignore inherited Python paths in this process only.
+foreach ($name in @('PYTHONHOME','PYTHONPATH','PYTHONSTARTUP','PYTHONUSERBASE')) { Remove-Item -LiteralPath ('Env:' + $name) -ErrorAction SilentlyContinue }
 try {
   if ($env:OS -ne 'Windows_NT') { throw 'Use Windows PowerShell for this setup.' }
   Set-Location -LiteralPath $PSScriptRoot

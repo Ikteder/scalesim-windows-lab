@@ -1,23 +1,31 @@
-# Optional Accelergy and CACTI on Windows through WSL2
-This is a separate optional path. Native Windows commands in the main README need no WSL.
-In administrator PowerShell if required:
+# Optional Accelergy and CACTI for Windows students
+
+This option runs Ubuntu **inside WSL2 on Windows**, not on a separate Linux computer. The basic native Windows lab does not require it.
+
+1. In PowerShell, check installed distributions:
+```powershell
+wsl --list --verbose
+```
+2. If Ubuntu-24.04 is absent, install it (administrator access/restart may be required):
 ```powershell
 wsl --install -d Ubuntu-24.04
 ```
-Restart if requested; open Ubuntu 24.04 and finish account setup. In **Ubuntu Bash**:
-```bash
-sudo apt update
-sudo apt install -y git python3-venv python3-pip build-essential make
+3. Open it once and complete any username/password setup:
+```powershell
+wsl -d Ubuntu-24.04
 ```
-Copy the complete extracted lab from Windows Downloads to your Linux home. Find your Windows user folder with `ls /mnt/c/Users`. Replace YOUR_WINDOWS_USERNAME below with the actual folder name. If your lab is elsewhere, use that actual source path. These are copy commands, not another download:
-```bash
-cp -r "/mnt/c/Users/YOUR_WINDOWS_USERNAME/Downloads/scalesim-windows-lab" "$HOME/scalesim-energy-lab"
-cd "$HOME/scalesim-energy-lab"
-bash energy/Setup-Energy.sh
-bash energy/Run-Energy.sh
+Type `exit` to return to PowerShell. If that distribution already exists, skip installing it again. WSL2 is required; complete Windows' WSL setup if Windows reports virtualization is unavailable.
+
+4. In the **same extracted repository folder** used for the native lab, run:
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Setup-WSL-Energy.ps1
 ```
-Use a destination without spaces. Setup downloads pinned Accelergy tool sources and packages, builds CACTI and applies two checked energy-specific repairs. All helper scripts are inside this repository. No global Python installation is changed. The Linux `.energy-venv` is independent of Windows `.venv`; never activate the Windows environment in Ubuntu.
 
-If a per-user Accelergy config from an older environment hides plug-ins, inspect `~/.config/accelergy/accelergy_config.yaml` and its estimator paths. Keep any existing customized configuration backed up before changing it.
+The Windows launcher discovers the repository's real path automatically. **Do not substitute a username, rename a folder or edit a path.** It works with spaces in the Windows path. The WSL bootstrap checks for Git, Python venv support, Make and a C++ compiler and installs missing prerequisites through apt (sudo may request your Linux password). It creates a fresh Linux workspace, copies the bundled lab there while excluding Windows environments/results, installs pinned tools in its own `.energy-venv`, builds CACTI, applies checked repairs and runs the CNN energy example.
 
-Output is a technology-model estimate using the legacy 40 nm/8-bit MAC description. Explicit idle/leakage actions are excluded because upstream idle counts can be negative. The MAC-per-array-slot rule and fixed reuse assumptions remain. This is not calibrated total-chip power. Every run uses new paths; failures stop the script. Logs are in `logs/` and data in `runs/`.
+The setup prints the exact workspace and log path. Every launch uses a new workspace so it cannot reuse an old broken environment. Internet access is required. No existing Linux user files or global Accelergy configuration are overwritten; a project-local estimator configuration selects the new environment's installed plug-ins.
+
+For another run after setup, open Ubuntu and `cd` to the exact workspace printed by the launcher, then run `bash energy/Run-Energy.sh`. Each run gets a new result folder. Prefer the launcher for a complete fresh start. Failure at any stage stops the process and prints an error/log location.
+
+## Interpretation
+Output uses the legacy 40 nm/8-bit MAC technology model. Explicit idle/leakage actions are excluded because upstream idle counts can be negative. The MAC-per-array-slot rule and fixed reuse assumptions remain; this is not calibrated total-chip power. Reports are under `runs/`, logs under `logs/`. The native Windows estimate is a separate, explicitly illustrative calculation, not this Accelergy estimate.

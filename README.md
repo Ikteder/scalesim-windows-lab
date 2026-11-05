@@ -2,13 +2,13 @@
 
 One repository contains the simulator, configuration/layout files, example workloads, Windows scripts and the optional WSL energy scripts. **There is no separate companion download.** Start here rather than following the earlier Word manual.
 
-The default path is native Windows. Git, Anaconda, PyTorch, a compiler and WSL are **not required** for the basic lab. Internet access is required during setup to install Python packages. The source is bundled, but Python and package wheels are not an offline installer.
+**This package is for Windows students only.** The default path is native Windows. Git, Anaconda, PyTorch, a compiler and WSL are **not required** for the basic lab. Internet access is required during setup to install Python packages. The source is bundled, but Python and package wheels are not an offline installer.
 
 ## 1 Download and extract
 
 Download this repository using GitHub **Code → Download ZIP**. Save it in Downloads, choose **Extract All**, and open the extracted folder containing `Setup.ps1` and this README. Do not run inside the ZIP preview. You may keep the lab in Downloads. Folder names containing spaces are supported on Windows.
 
-If the extracted folder ends in `-main`, you may rename it to `scalesim-windows-lab` to match the optional WSL instructions. Do not move the folder after setup: virtual environments record their original location. If you move it, extract another fresh copy and run setup there.
+No particular folder name or Windows username is required. Do not move the folder after setup: virtual environments record their original location. If you move it, extract another fresh copy and run setup there.
 
 ## 2 Check Python before setup
 
@@ -37,6 +37,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Setup.ps1 -PythonExe "
 ```
 
 This policy setting applies to the child PowerShell process only. No activation command or permanent execution-policy change is needed.
+
+The setup and runner clear inherited Python search-path overrides in their own process so an older Python installation cannot redirect this lab's imports. They do not change your saved Windows environment settings.
 
 Setup creates this folder's `.venv`, installs exact package versions from `requirements.txt`, installs the bundled simulator in editable mode and checks:
 
@@ -86,6 +88,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Run-Lab.ps1 -Task vit
 
 Start with AlexNet. Large runs take time and memory; traces are disabled, but the internal cycle matrices still use RAM. The bundled topology files contain 5, 21, 54 and 5 rows respectively. In particular, this AlexNet file has only five convolution rows, not its dense classifier. Do not equate a CSV's name with a complete framework network.
 
+The latest local check completed AlexNet and checked the other three commands for startup errors before deliberately stopping them. Those startup checks do not certify full completion; see [VALIDATION.md](VALIDATION.md).
+
 ## 6 Your own model and direct module use
 
 `examples/cnn.csv` uses `Layer,M,N,K,` rows: M×K times K×N, with M×N×K useful MACs. Preserve trailing commas; the legacy CSV parser discards its final field. The sample CNN's dense GEMM dimensions are included, so weights and training data are unnecessary.
@@ -93,7 +97,7 @@ Start with AlexNet. Large runs take time and memory; traces are disabled, but th
 An optional restricted PyTorch exporter is supplied as `examples/export_pytorch.py`. PyTorch is not installed by basic setup. If you want to use it:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+.\.venv\Scripts\python.exe -m pip install -r requirements-torch.txt
 .\.venv\Scripts\python.exe .\examples\export_pytorch.py
 ```
 
