@@ -1,0 +1,10 @@
+numpy==2.5.4
+pandas==3.1.1
+configparser==7.3.0
+absl-py==2.5.1
+tqdm==4.70.1
+python-dateutil==4.0.0
+tzdata==2026.6
+colorama==0.4.6
+setuptools==78.1.0
+wheel==0.45.1

@@ -1,0 +1,4 @@
+Layer,M,N,K,
+features.0,1024,32,27,
+features.3,64,64,288,
+fc,1,10,4096,

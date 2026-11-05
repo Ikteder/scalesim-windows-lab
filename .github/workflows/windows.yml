@@ -1,0 +1,15 @@
+name: Windows acceptance
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - shell: powershell
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Setup.ps1 -PythonExe (Get-Command python).Source
+      - shell: powershell
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Run-Lab.ps1 -Task energy
