@@ -21,7 +21,7 @@ for spec in 'accelergy 6911d15686ee7efdceba7d95605102df4472ae3a' 'accelergy-alad
   fi
 done
 python -m pip install ./accelergy pyyaml ./accelergy-aladdin-plug-in ./accelergy-library-plug-in
-(cd accelergy-cacti-plug-in; make -B build; test -x cacti/cacti; python -m pip install .)
+(cd accelergy-cacti-plug-in; if ! test -x cacti/cacti; then make -C cacti; fi; test -x cacti/cacti; python -m pip install .)
 cd "$root/vendor/scale-sim-v3"
 python "$root/energy/patch_energy.py"
 python -m pip check

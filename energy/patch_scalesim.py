@@ -18,7 +18,7 @@ def patch(root):
     pending=[]
     for name,old,new in FIXES:
         path=root/name
-        data=path.read_bytes(); text=data.decode('utf-8')
+        data=path.read_bytes(); text=data.decode('utf-8').replace('\r\n', '\n')
         if text.count(new)==1 and old not in text:
             print('Already fixed:',name); continue
         if text.count(old)!=1 or new in text:
