@@ -15,7 +15,10 @@ for spec in 'accelergy 6911d15686ee7efdceba7d95605102df4472ae3a' 'accelergy-alad
   read -r name revision <<< "$spec"
   test -d "$name/.git" || git clone "https://github.com/Accelergy-Project/$name.git" "$name"
   git -C "$name" checkout "$revision"
-  git -C "$name" submodule update --init --recursive
+  # Accelergy's test-only submodule uses SSH and is not needed by students.
+  if [ "$name" != accelergy ]; then
+    git -c url.https://github.com/.insteadOf=git@github.com: -C "$name" submodule update --init --recursive
+  fi
 done
 python -m pip install ./accelergy pyyaml ./accelergy-aladdin-plug-in ./accelergy-library-plug-in
 (cd accelergy-cacti-plug-in; make -B build; test -x cacti/cacti; python -m pip install .)
